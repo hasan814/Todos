@@ -11,7 +11,15 @@ const ProfilePage = () => {
   const [password, setPassword] = useState("");
 
   // ============= Function ==============
-  const submitHandler = () => {};
+  const submitHandler = async () => {
+    const response = await fetch("/api/profile", {
+      method: "POST",
+      body: JSON.stringify({ name, lastName, password }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
+    console.log(data);
+  };
 
   // ============= Rendeing ==============
   return (
