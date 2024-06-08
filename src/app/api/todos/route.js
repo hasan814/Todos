@@ -69,3 +69,25 @@ export async function GET(req) {
     );
   }
 }
+
+export async function PATCH(req) {
+  try {
+    await connectDB();
+
+    const { id, status } = await req.json();
+    if (!id || !!status)
+      return NextResponse.json({ message: "Invalid Data!" }, { status: 422 });
+    const result = await User.updateOne(
+      { "todos._id": id },
+      { $set: { "todos.$.status": status } }
+    );
+    console.log(result);
+    return NextResponse.json({ message: "Data Patch!" }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "An error has been occured in DB" },
+      { status: 500 }
+    );
+  }
+}
