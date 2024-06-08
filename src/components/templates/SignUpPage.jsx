@@ -23,7 +23,7 @@ const SignUpPage = () => {
   // ============ Effect ============
   useEffect(() => {
     if (status === "authenticated") router.replace("/");
-  }, [status]);
+  }, [status, router]);
   // ============ Function ============
   const submitHandler = async () => {
     setLoader(true);

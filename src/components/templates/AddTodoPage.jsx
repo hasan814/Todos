@@ -1,25 +1,30 @@
 "use client";
 
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { BsAlignStart } from "react-icons/bs";
 import { GrAddCircle } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { MdDoneAll } from "react-icons/md";
-import { useState } from "react";
 
 import RadioBtn from "@/elements/RadioBtn";
 import Loader from "@/elements/Loader";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 const AddTodoPage = () => {
+  // =========== Router ==========
+  const router = useRouter();
+
   // =========== Session ==========
   const session = useSession();
-  if (session.status === "unauthenticated") {
-    redirect("/signin");
-    return null;
-  }
+
+  // =========== Effect ==========
+  useEffect(() => {
+    if (session.status === "unauthenticated") router.push("/signin");
+  }, [router, session.status]);
+
   // =========== State ==========
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("todo");
@@ -40,6 +45,8 @@ const AddTodoPage = () => {
   };
 
   // =========== Rendering ==========
+  if (session.status === "unauthenticated") return null;
+
   return (
     <div className="add-form">
       <Toaster />

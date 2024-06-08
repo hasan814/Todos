@@ -23,7 +23,7 @@ const SignInPage = () => {
   // ============ Effect =============
   useEffect(() => {
     if (status === "authenticated") router.replace("/");
-  }, [status]);
+  }, [router, status]);
   // ============ Function =============
   const loginHandler = async () => {
     setLoader(true);
