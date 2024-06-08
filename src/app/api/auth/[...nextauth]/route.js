@@ -2,7 +2,7 @@ import { verifyPassword } from "@/utils/auth";
 
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "@/utils/connectDB";
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import User from "@/models/User";
 
 export const authOptions = {

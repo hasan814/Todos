@@ -1,4 +1,4 @@
-const Header = () => {
+const Header = async () => {
   return (
     <header>
       <p>Todo App</p>

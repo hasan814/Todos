@@ -1,6 +1,7 @@
 "use client";
 
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { toast, Toaster } from "react-hot-toast";
 import { BsAlignStart } from "react-icons/bs";
 import { GrAddCircle } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
@@ -8,18 +9,32 @@ import { MdDoneAll } from "react-icons/md";
 import { useState } from "react";
 
 import RadioBtn from "@/elements/RadioBtn";
+import Loader from "@/elements/Loader";
 
 const AddTodoPage = () => {
   // =========== State ==========
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("todo");
+  const [loader, setLoader] = useState("");
 
   // =========== Function ==========
-  const addHandler = () => {};
+  const addHandler = async () => {
+    setLoader(true);
+    const response = await fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify({ title, status }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
+    setLoader(false);
+    if (data.message === "Todo Created!")
+      toast.success("Todo Add"), setTitle(""), setStatus("todo");
+  };
 
   // =========== Rendering ==========
   return (
     <div className="add-form">
+      <Toaster />
       <h2>
         <GrAddCircle />
         Add New Todo
@@ -68,7 +83,7 @@ const AddTodoPage = () => {
             <MdDoneAll />
           </RadioBtn>
         </div>
-        <button onClick={addHandler}>Add</button>
+        {loader ? <Loader /> : <button onClick={addHandler}>Add</button>}
       </div>
     </div>
   );
