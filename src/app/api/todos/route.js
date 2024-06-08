@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import User from "@/models/User";
 import connectDB from "@/utils/connectDB";
+import { sortTodos } from "@/utils/sortTodos";
 
 export async function POST(req) {
   try {
@@ -35,6 +36,35 @@ export async function POST(req) {
     console.log(error);
     return NextResponse.json(
       { error: "An error has occurred in the DB" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(req) {
+  try {
+    await connectDB();
+
+    const session = await getServerSession(req);
+    const email = session.user.email;
+    if (!session)
+      return NextResponse.json(
+        { error: "Please log in to your account" },
+        { status: 401 }
+      );
+
+    const user = await User.findOne({ email });
+    if (!user)
+      return NextResponse.json(
+        { error: "User doesn't exist!" },
+        { status: 404 }
+      );
+    const sortedData = sortTodos(user.todos);
+    return NextResponse.json({ data: sortedData }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "An error has been occured in DB" },
       { status: 500 }
     );
   }
