@@ -75,7 +75,6 @@ export async function PATCH(req) {
     await connectDB();
 
     const { id, status } = await req.json();
-    console.log(status);
     if (!id || !status)
       return NextResponse.json({ message: "Invalid Data!" }, { status: 422 });
     const result = await User.updateOne(
