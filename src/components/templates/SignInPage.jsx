@@ -1,9 +1,9 @@
 "use client";
 
+import { signIn, useSession } from "next-auth/react";
+import { toast, Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 import Loader from "@/elements/Loader";
 import Link from "next/link";
@@ -17,6 +17,13 @@ const SignInPage = () => {
   const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
 
+  // ============ Session =============
+  const { status } = useSession();
+
+  // ============ Effect =============
+  useEffect(() => {
+    if (status === "authenticated") router.replace("/");
+  }, [status]);
   // ============ Function =============
   const loginHandler = async () => {
     setLoader(true);

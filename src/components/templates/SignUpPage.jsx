@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import Link from "next/link";
 import Loader from "@/elements/Loader";
@@ -16,6 +17,13 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState(false);
 
+  // ============ Session ============
+  const { status } = useSession();
+
+  // ============ Effect ============
+  useEffect(() => {
+    if (status === "authenticated") router.replace("/");
+  }, [status]);
   // ============ Function ============
   const submitHandler = async () => {
     setLoader(true);
