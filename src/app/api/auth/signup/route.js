@@ -1,7 +1,8 @@
-import User from "@/models/User";
 import { hashPassword } from "@/utils/auth";
-import connectDB from "@/utils/connectDB";
 import { NextResponse } from "next/server";
+
+import connectDB from "@/utils/connectDB";
+import User from "@/models/User";
 
 export const POST = async (req) => {
   try {
@@ -23,7 +24,7 @@ export const POST = async (req) => {
 
     const hashedPassword = await hashPassword(password);
     await User.create({ email, password: hashedPassword });
-    return NextResponse.json({ error: "user created!" }, { status: 201 });
+    return NextResponse.json({ message: "user created!" }, { status: 201 });
   } catch (error) {
     console.log(error);
     NextResponse.json(
