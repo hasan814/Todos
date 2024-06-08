@@ -51,7 +51,7 @@ const SignUpPage = () => {
 
       <div>
         <p>Have an account?</p>
-        <Link href={"signin"}>Sign In</Link>
+        <Link href={"/signin"}>Sign In</Link>
       </div>
     </div>
   );
