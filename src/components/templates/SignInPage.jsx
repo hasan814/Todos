@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 import Loader from "@/elements/Loader";
 import Link from "next/link";
@@ -17,7 +18,17 @@ const SignInPage = () => {
   const [loader, setLoader] = useState(false);
 
   // ============ Function =============
-  const loginHandler = () => {};
+  const loginHandler = async () => {
+    setLoader(true);
+    const response = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    setLoader(false);
+    if (!response.error) toast.success("Sign In"), router.push("/");
+    else toast.error(response.error);
+  };
 
   // ============ Rendering =============
   return (
