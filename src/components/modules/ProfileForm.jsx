@@ -1,8 +1,12 @@
+import Loader from "@/elements/Loader";
+
 const ProfileForm = ({
   name,
   lastName,
   password,
   setName,
+  loader,
+  data,
   setLastName,
   setPassword,
   submitHandler,
@@ -38,7 +42,7 @@ const ProfileForm = ({
           />
         </div>
       </div>
-      <button onClick={submitHandler}>Submit</button>
+      {data ? <Loader /> : <button onClick={submitHandler}>Submit Data</button>}
     </>
   );
 };

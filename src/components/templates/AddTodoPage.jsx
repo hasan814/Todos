@@ -10,8 +10,16 @@ import { useState } from "react";
 
 import RadioBtn from "@/elements/RadioBtn";
 import Loader from "@/elements/Loader";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const AddTodoPage = () => {
+  // =========== Session ==========
+  const session = useSession();
+  if (session.status === "unauthenticated") {
+    redirect("/signin");
+    return null;
+  }
   // =========== State ==========
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("todo");
@@ -27,7 +35,7 @@ const AddTodoPage = () => {
     });
     const data = await response.json();
     setLoader(false);
-    if (data.message === "Todo Created!")
+    if (data.message === "Todo created!")
       toast.success("Todo Add"), setTitle(""), setStatus("todo");
   };
 

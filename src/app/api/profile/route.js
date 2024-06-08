@@ -1,8 +1,9 @@
-import User from "@/models/User";
-import { verifyPassword } from "@/utils/auth";
-import connectDB from "@/utils/connectDB";
 import { getServerSession } from "next-auth";
+import { verifyPassword } from "@/utils/auth";
 import { NextResponse } from "next/server";
+
+import connectDB from "@/utils/connectDB";
+import User from "@/models/User";
 
 export async function POST(req) {
   try {
@@ -24,8 +25,10 @@ export async function POST(req) {
       );
 
     const { name, lastName, password } = await req.json();
+
     const isValid = await verifyPassword(password, user.password);
-    if (isValid)
+
+    if (!isValid)
       return NextResponse.json(
         { error: "message is incorect" },
         { status: 422 }
@@ -35,7 +38,7 @@ export async function POST(req) {
     await user.save();
     return NextResponse.json(
       { data: { name, lastName, email } },
-      { status: "success" }
+      { status: 201 }
     );
   } catch (error) {
     console.log(error);
@@ -45,6 +48,7 @@ export async function POST(req) {
     );
   }
 }
+
 export async function GET(req) {
   try {
     await connectDB();
@@ -64,17 +68,17 @@ export async function GET(req) {
         { status: 404 }
       );
 
-    const { password } = await req.json();
-    const isValid = await verifyPassword(password, user.password);
-    if (isValid)
-      return NextResponse.json(
-        { error: "message is incorect" },
-        { status: 422 }
-      );
+    // const { password } = await req.json();
+    // const isValid = await verifyPassword(password, user.password);
+    // if (!isValid)
+    //   return NextResponse.json(
+    //     { error: "message is incorect" },
+    //     { status: 422 }
+    //   );
 
     return NextResponse.json(
       { data: { name: user.name, lastName: user.lastName, email: user.email } },
-      { status: "success" }
+      { status: 200 }
     );
   } catch (error) {
     console.log(error);
